@@ -8,10 +8,7 @@ using RestAPIDDD.Domain.Entities;
 
 namespace RestAPIDDD.Infrastructure.Data.Repositories
 {
-    public class RepositoryProduto : RepositoryBase<Produto>, IRepositoryProduto
+    public class RepositoryProduto(SqlContext context) : RepositoryBase<Produto>(context), IRepositoryProduto
     {
-        public RepositoryProduto(SqlContext context) : base(context)
-        {
-        }
     }
 }

@@ -6,6 +6,6 @@
         void Update(TEntity entity);
         void Remove(TEntity entity);
         Task<IEnumerable<TEntity>> GetAll();
-        Task<TEntity> GetById(int id);
+        Task<TEntity> GetById(uint id);
     }
 }

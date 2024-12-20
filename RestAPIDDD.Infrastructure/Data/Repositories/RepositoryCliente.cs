@@ -3,10 +3,7 @@ using RestAPIDDD.Domain.Entities;
 
 namespace RestAPIDDD.Infrastructure.Data.Repositories
 {
-    public class RepositoryCliente : RepositoryBase<Cliente>, IRepositoryCliente
+    public class RepositoryCliente(SqlContext context) : RepositoryBase<Cliente>(context), IRepositoryCliente
     {
-        public RepositoryCliente(SqlContext context) : base(context)
-        {
-        }
     }
 }

@@ -28,9 +28,10 @@ namespace RestAPIDDD.Infrastructure.Data.Repositories
             return Task.FromResult(_context.Set<TEntity>().AsEnumerable());
         }
 
-        public Task<TEntity> GetById(int id)
+        public Task<TEntity> GetById(uint id)
         {
-            return Task.FromResult(_context.Set<TEntity>().Find(id));
+            var entity = _context.Set<TEntity>().Find(id);
+            return Task.FromResult(entity!);
         }
 
         public void Remove(TEntity entity)

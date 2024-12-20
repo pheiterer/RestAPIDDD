@@ -1,0 +1,39 @@
+﻿version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: RESTAPIDDD.API/Dockerfile
+    container_name: restapiddd_api
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    working_dir: /app
+    command: ["dotnet", "RestAPIDDD.API.dll"]
+    depends_on:
+      - sqlserver
+    networks:
+      - app_network 
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: restapiddd_sqlserver
+    environment:
+      SA_PASSWORD: "YourStrong!Passw0rd"
+      ACCEPT_EULA: "Y"
+      MSSQL_TCP_PORT: 1433
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserverdata:/var/opt/mssql
+    networks:
+      - app_network
+
+volumes:
+  sqlserverdata:
+
+networks:
+  app_network:
+    name: restapiddd_network
