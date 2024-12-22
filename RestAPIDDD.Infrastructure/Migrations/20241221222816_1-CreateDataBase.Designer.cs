@@ -12,8 +12,8 @@ using RestAPIDDD.Infrastructure.Data;
 namespace RestAPIDDD.Infrastructure.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    [Migration("20241220070046_first")]
-    partial class first
+    [Migration("20241221222816_1-CreateDataBase")]
+    partial class _1CreateDataBase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -5,42 +5,40 @@ using RestAPIDDD.Doamin.Core.Interfaces.Services;
 
 namespace RestAPIDDD.Application
 {
-    public class ApplicationServiceCliente : IApplicationServiceCliente
+    public class ApplicationServiceCliente(IServiceCliente serviceCliente, IMapperCliente mapperCliente) : IApplicationServiceCliente
     {
-        private readonly IServiceCliente _serviceCliente;
-        private readonly IMapperCliente _mapperCliente;
+        private readonly IServiceCliente _serviceCliente = serviceCliente;
+        private readonly IMapperCliente _mapperCliente = mapperCliente;
 
-        public ApplicationServiceCliente(IServiceCliente serviceCliente, IMapperCliente mapperCliente)
+        public async Task Add(ClienteDto entity)
         {
-            _serviceCliente = serviceCliente;
-            _mapperCliente = mapperCliente;
+            ArgumentNullException.ThrowIfNull(entity);
+            await _serviceCliente.Add(_mapperCliente.MapperDtoToEntity(entity));
         }
 
-        public void Add(ClienteDto entity)
+        public async Task<IEnumerable<ClienteDto>> GetAll()
         {
-            _serviceCliente.Add(_mapperCliente.MapperDtoToEntity(entity));
+            var clientes = await _serviceCliente.GetAll();
+            return _mapperCliente.MapperListClientesDto(clientes);
         }
 
-        public Task<IEnumerable<ClienteDto>> GetAll()
+        public async Task<ClienteDto> GetById(uint id)
         {
-            var clientes =  _serviceCliente.GetAll();
-            return Task.FromResult(_mapperCliente.MapperListClientesDto(clientes.Result));
+            ArgumentNullException.ThrowIfNull(id);
+            var cliente = await _serviceCliente.GetById(id);
+            return _mapperCliente.MapperEntityToDto(cliente);
         }
 
-        public Task<ClienteDto> GetById(uint id)
+        public async Task Remove(ClienteDto entity)
         {
-            var cliente = _serviceCliente.GetById(id);
-            return Task.FromResult(_mapperCliente.MapperEntityToDto(cliente.Result));
+            ArgumentNullException.ThrowIfNull(entity);
+            await _serviceCliente.Remove(_mapperCliente.MapperDtoToEntity(entity));
         }
 
-        public void Remove(ClienteDto entity)
+        public async Task Update(ClienteDto entity)
         {
-            _serviceCliente.Remove(_mapperCliente.MapperDtoToEntity(entity));
-        }
-
-        public void Update(ClienteDto entity)
-        {
-            _serviceCliente.Update(_mapperCliente.MapperDtoToEntity(entity));
+            ArgumentNullException.ThrowIfNull(entity);
+            await _serviceCliente.Update(_mapperCliente.MapperDtoToEntity(entity));
         }
     }
 }

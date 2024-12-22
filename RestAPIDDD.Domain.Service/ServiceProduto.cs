@@ -6,6 +6,5 @@ namespace RestAPIDDD.Domain.Service
 {
     public class ServiceProduto(IRepositoryProduto repository) : ServiceBase<Produto>(repository), IServiceProduto
     {
-        private readonly IRepositoryProduto _repository = repository;
     }
 }

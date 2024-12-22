@@ -2,7 +2,7 @@
 {
     public class ClienteDto
     {
-        public uint Id { get; set; }
+        public uint? Id { get; set; }
         
         public required string Nome { get; set; }
 

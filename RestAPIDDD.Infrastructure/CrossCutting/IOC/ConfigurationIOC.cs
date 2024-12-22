@@ -2,6 +2,7 @@
 using RestAPIDDD.Application;
 using RestAPIDDD.Application.Interfaces;
 using RestAPIDDD.Application.Interfaces.Mapper;
+using RestAPIDDD.Application.Mappers;
 using RestAPIDDD.Doamin.Core.Interfaces.Repositories;
 using RestAPIDDD.Doamin.Core.Interfaces.Services;
 using RestAPIDDD.Domain.Service;
@@ -9,7 +10,7 @@ using RestAPIDDD.Infrastructure.Data.Repositories;
 
 namespace RestAPIDDD.Infrastructure.CrossCutting.IOC
 {
-    public class ConfigurationIOC
+    public sealed class ConfigurationIOC
     {
         public static void Load(ContainerBuilder builder)
         {

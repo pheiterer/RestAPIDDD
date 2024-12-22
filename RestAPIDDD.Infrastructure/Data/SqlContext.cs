@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestAPIDDD.Domain.Entities;
+using RestAPIDDD.Infrastructure.Data.Interfaces;
 
 namespace RestAPIDDD.Infrastructure.Data
 {
-    public class SqlContext(DbContextOptions<SqlContext> options) : DbContext(options)
+    public class SqlContext(DbContextOptions<SqlContext> options) : DbContext(options), ISqlContext
     {
-        public DbSet<Cliente> Clientes { get; set; } = null!;
-        public DbSet<Produto> Produtos { get; set; } = null!;
+        public virtual DbSet<Cliente> Clientes { get; set; } = null!;
+        public virtual DbSet<Produto> Produtos { get; set; } = null!;
 
         public override int SaveChanges()
         {
@@ -22,6 +23,11 @@ namespace RestAPIDDD.Infrastructure.Data
                 }
             }
             return base.SaveChanges();
+        }
+
+        public virtual void SetModified(object entity)
+        {
+            Entry(entity).State = EntityState.Modified;
         }
     }
 }

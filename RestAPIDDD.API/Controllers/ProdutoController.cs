@@ -6,7 +6,7 @@ namespace RestAPIDDD.API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class ProdutoController : Controller
+    public sealed class ProdutoController : Controller
     {
 
         private readonly IApplicationServiceProduto _applicationServiceProduto;
@@ -17,43 +17,44 @@ namespace RestAPIDDD.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public async Task<ActionResult<IEnumerable<ProdutoDto>>> Get()
         {
-            return Ok(_applicationServiceProduto.GetAll());
+            var result = await _applicationServiceProduto.GetAll();
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<string> Get(uint id)
+        public async Task<ActionResult<ProdutoDto>> Get(uint id)
         {
-            return Ok(_applicationServiceProduto.GetById(id));
+            var result = await _applicationServiceProduto.GetById(id);
+            return Ok(result);
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] ProdutoDto ProdutoDto)
+        public async Task<ActionResult> Post([FromBody] ProdutoDto ProdutoDto)
         {
             try
             {
                 if (ProdutoDto == null)
                     return NotFound();
 
-                _applicationServiceProduto.Add(ProdutoDto);
+                await _applicationServiceProduto.Add(ProdutoDto);
                 return Ok("Produto cadastrado com sucesso!");
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
 
         [HttpPut]
-        public ActionResult Put([FromBody] ProdutoDto ProdutoDto)
+        public async Task<ActionResult> Put([FromBody] ProdutoDto ProdutoDto)
         {
             try
             {
                 if (ProdutoDto == null)
                     return NotFound();
-                _applicationServiceProduto.Update(ProdutoDto);
+                await _applicationServiceProduto.Update(ProdutoDto);
                 return Ok("Produto atualizado com sucesso!");
             }
             catch (Exception)
@@ -63,13 +64,13 @@ namespace RestAPIDDD.API.Controllers
         }
 
         [HttpDelete]
-        public ActionResult Delete([FromBody] ProdutoDto ProdutoDto)
+        public async Task<ActionResult> Delete([FromBody] ProdutoDto ProdutoDto)
         {
             try
             {
                 if (ProdutoDto == null)
                     return NotFound();
-                _applicationServiceProduto.Remove(ProdutoDto);
+                await _applicationServiceProduto.Remove(ProdutoDto);
                 return Ok("Produto removido com sucesso!");
             }
             catch (Exception)

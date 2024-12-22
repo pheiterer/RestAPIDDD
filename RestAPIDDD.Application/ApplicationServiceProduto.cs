@@ -5,43 +5,41 @@ using RestAPIDDD.Doamin.Core.Interfaces.Services;
 
 namespace RestAPIDDD.Application
 {
-    public class ApplicationServiceProduto : IApplicationServiceProduto
+    public class ApplicationServiceProduto(IServiceProduto serviceProduto, IMapperProduto mapperProduto) : IApplicationServiceProduto
     {
 
-        private readonly IServiceProduto _serviceProduto;
-        private readonly IMapperProduto _mapperProduto;
+        private readonly IServiceProduto _serviceProduto = serviceProduto;
+        private readonly IMapperProduto _mapperProduto = mapperProduto;
 
-        public ApplicationServiceProduto(IServiceProduto serviceProduto, IMapperProduto mapperProduto)
+        public async Task Add(ProdutoDto entity)
         {
-            _serviceProduto = serviceProduto;
-            _mapperProduto = mapperProduto;
+            ArgumentNullException.ThrowIfNull(entity);
+            await _serviceProduto.Add(_mapperProduto.MapperDtoToEntity(entity));
         }
 
-        public void Add(ProdutoDto entity)
+        public async Task<IEnumerable<ProdutoDto>> GetAll()
         {
-            _serviceProduto.Add(_mapperProduto.MapperDtoToEntity(entity));
+            var produtos = await _serviceProduto.GetAll();
+            return _mapperProduto.MapperListProdutosDto(produtos);
         }
 
-        public Task<IEnumerable<ProdutoDto>> GetAll()
+        public async Task<ProdutoDto> GetById(uint id)
         {
-            var produtos = _serviceProduto.GetAll();
-            return Task.FromResult(_mapperProduto.MapperListProdutosDto(produtos.Result));
+            ArgumentNullException.ThrowIfNull(id);
+            var produto = await _serviceProduto.GetById(id);
+            return _mapperProduto.MapperEntityToDto(produto);
         }
 
-        public Task<ProdutoDto> GetById(uint id)
+        public async Task Remove(ProdutoDto entity)
         {
-            var produto = _serviceProduto.GetById(id);
-            return Task.FromResult(_mapperProduto.MapperEntityToDto(produto.Result));
+            ArgumentNullException.ThrowIfNull(entity);
+            await _serviceProduto.Remove(_mapperProduto.MapperDtoToEntity(entity));
         }
 
-        public void Remove(ProdutoDto entity)
+        public async Task Update(ProdutoDto entity)
         {
-            _serviceProduto.Remove(_mapperProduto.MapperDtoToEntity(entity));
-        }
-
-        public void Update(ProdutoDto entity)
-        {
-            _serviceProduto.Update(_mapperProduto.MapperDtoToEntity(entity));
+            ArgumentNullException.ThrowIfNull(entity);
+            await _serviceProduto.Update(_mapperProduto.MapperDtoToEntity(entity));
         }
     }
 }

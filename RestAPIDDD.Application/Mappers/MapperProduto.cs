@@ -1,7 +1,8 @@
 ﻿using RestAPIDDD.Application.Dtos;
+using RestAPIDDD.Application.Interfaces.Mapper;
 using RestAPIDDD.Domain.Entities;
 
-namespace RestAPIDDD.Application.Interfaces.Mapper
+namespace RestAPIDDD.Application.Mappers
 {
     public class MapperProduto : IMapperProduto
     {
@@ -9,7 +10,7 @@ namespace RestAPIDDD.Application.Interfaces.Mapper
         {
             return new Produto()
             {
-                Id = produtoDto.Id,
+                Id = produtoDto.Id ?? 0,
                 Nome = produtoDto.Nome,
                 Valor = produtoDto.Valor,
             };

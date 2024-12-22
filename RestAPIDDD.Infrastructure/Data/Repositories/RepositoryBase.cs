@@ -1,63 +1,62 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using RestAPIDDD.Doamin.Core.Interfaces.Repositories;
 
 namespace RestAPIDDD.Infrastructure.Data.Repositories
 {
-    public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : class
+    public class RepositoryBase<TEntity>(SqlContext context) : IRepositoryBase<TEntity> where TEntity : class
     {
-        private readonly SqlContext _context;
+        private readonly SqlContext _context = context;
 
-        public RepositoryBase(SqlContext context) => this._context = context;
-
-        public void Add(TEntity entity)
+        public async Task Add(TEntity entity)
         {
             try
             {
-                _context.Set<TEntity>().Add(entity);
-                _context.SaveChanges();
+                ArgumentNullException.ThrowIfNull(entity);
+                await _context.Set<TEntity>().AddAsync(entity);
+                await _context.SaveChangesAsync();
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
 
-        public Task<IEnumerable<TEntity>> GetAll()
+        public async Task<IEnumerable<TEntity>> GetAll()
         {
-            return Task.FromResult(_context.Set<TEntity>().AsEnumerable());
+            return await Task.FromResult(_context.Set<TEntity>().AsEnumerable());
         }
 
-        public Task<TEntity> GetById(uint id)
+        public async Task<TEntity> GetById(uint id)
         {
-            var entity = _context.Set<TEntity>().Find(id);
-            return Task.FromResult(entity!);
+            var entity = await _context.Set<TEntity>().FindAsync(id);
+            return entity!;
         }
 
-        public void Remove(TEntity entity)
+        public async Task Remove(TEntity entity)
         {
             try
             {
+                ArgumentNullException.ThrowIfNull(entity);
                 _context.Set<TEntity>().Remove(entity);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
 
-        public void Update(TEntity entity)
+        public async Task Update(TEntity entity)
         {
             try
             {
-                _context.Entry(entity).State = EntityState.Modified;
-                _context.SaveChanges();
+                ArgumentNullException.ThrowIfNull(entity);
+                _context.SetModified(entity);
+                await _context.SaveChangesAsync();
             }
             catch (Exception)
             {
-
                 throw;
             }
         }

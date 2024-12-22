@@ -6,6 +6,5 @@ namespace RestAPIDDD.Domain.Service
 {
     public class ServiceCliente(IRepositoryCliente repository) : ServiceBase<Cliente>(repository), IServiceCliente
     {
-        private readonly IRepositoryCliente _repository = repository;
     }
 }

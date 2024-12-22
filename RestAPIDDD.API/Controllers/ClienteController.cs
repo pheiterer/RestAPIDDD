@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Net;
+using Microsoft.AspNetCore.Mvc;
 using RestAPIDDD.Application.Dtos;
 using RestAPIDDD.Application.Interfaces;
 
@@ -6,9 +7,8 @@ namespace RestAPIDDD.API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class ClienteController : Controller
+    public sealed class ClienteController : Controller
     {
-
         private readonly IApplicationServiceCliente _applicationServiceCliente;
 
         public ClienteController(IApplicationServiceCliente applicationServiceCliente)
@@ -17,64 +17,69 @@ namespace RestAPIDDD.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public async Task<ActionResult<IEnumerable<ClienteDto>>> Get()
         {
-            return Ok(_applicationServiceCliente.GetAll());
+            var result = await _applicationServiceCliente.GetAll();
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<string> Get(uint id)
+        public async Task<ActionResult<ClienteDto>> Get(uint id)
         {
-            return Ok(_applicationServiceCliente.GetById(id));
+            var result = await _applicationServiceCliente.GetById(id);
+            if (result == null)
+                return NotFound();
+            return Ok(result);
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] ClienteDto clienteDto)
+        public async Task<ActionResult> Post([FromBody] ClienteDto clienteDto)
         {
+            if (clienteDto == null)
+                return BadRequest("Cliente data is null");
+
             try
             {
-                if (clienteDto == null)
-                    return NotFound();
-
-                _applicationServiceCliente.Add(clienteDto);
-                return Ok("Cliente cadastrado com sucesso!");
+                await _applicationServiceCliente.Add(clienteDto);
+                return StatusCode((int)HttpStatusCode.Created, "Cliente cadastrado com sucesso!");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
 
         [HttpPut]
-        public ActionResult Put([FromBody] ClienteDto clienteDto)
+        public async Task<ActionResult> Put([FromBody] ClienteDto clienteDto)
         {
+            if (clienteDto == null)
+                return BadRequest("Cliente data is null");
+
             try
             {
-                if (clienteDto == null)
-                    return NotFound();
-                _applicationServiceCliente.Update(clienteDto);
+                await _applicationServiceCliente.Update(clienteDto);
                 return Ok("Cliente atualizado com sucesso!");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
 
         [HttpDelete]
-        public ActionResult Delete([FromBody] ClienteDto clienteDto)
+        public async Task<ActionResult> Delete([FromBody] ClienteDto clienteDto)
         {
+            if (clienteDto == null)
+                return BadRequest("Cliente data is null");
+
             try
             {
-                if (clienteDto == null)
-                    return NotFound();
-                _applicationServiceCliente.Remove(clienteDto);
+                await _applicationServiceCliente.Remove(clienteDto);
                 return Ok("Cliente removido com sucesso!");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
     }

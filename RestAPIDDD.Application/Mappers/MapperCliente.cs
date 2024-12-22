@@ -1,7 +1,8 @@
 ﻿using RestAPIDDD.Application.Dtos;
+using RestAPIDDD.Application.Interfaces.Mapper;
 using RestAPIDDD.Domain.Entities;
 
-namespace RestAPIDDD.Application.Interfaces.Mapper
+namespace RestAPIDDD.Application.Mappers
 {
     public class MapperCliente : IMapperCliente
     {
@@ -9,11 +10,10 @@ namespace RestAPIDDD.Application.Interfaces.Mapper
         {
             return new Cliente()
             {
-                Id = clienteDto.Id,
+                Id = clienteDto.Id ?? 0,
                 Nome = clienteDto.Nome,
                 Sobrenome = clienteDto.Sobrenome,
                 Email = clienteDto.Email
-
             };
         }
 
