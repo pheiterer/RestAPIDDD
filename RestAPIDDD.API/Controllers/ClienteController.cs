@@ -7,14 +7,9 @@ namespace RestAPIDDD.API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public sealed class ClienteController : Controller
+    public sealed class ClienteController(IApplicationServiceCliente applicationServiceCliente) : Controller
     {
-        private readonly IApplicationServiceCliente _applicationServiceCliente;
-
-        public ClienteController(IApplicationServiceCliente applicationServiceCliente)
-        {
-            _applicationServiceCliente = applicationServiceCliente;
-        }
+        private readonly IApplicationServiceCliente _applicationServiceCliente = applicationServiceCliente;
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ClienteDto>>> Get()

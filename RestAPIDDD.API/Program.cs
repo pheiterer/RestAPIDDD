@@ -1,5 +1,6 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using RestAPIDDD.Infrastructure.CrossCutting;
 using RestAPIDDD.Infrastructure.Data;
@@ -7,7 +8,6 @@ using RestAPIDDD.Infrastructure.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -22,6 +22,24 @@ builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 });
 
 var app = builder.Build();
+
+// Apply migrations at startup if the database does not exist
+using (var scope = app.Services.CreateScope())
+{
+    try
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<SqlContext>();
+        if (!dbContext.Database.CanConnect())
+        {
+            Thread.Sleep(10000);
+            dbContext.Database.Migrate();
+        }
+    }
+    catch (SqlException ex)
+    {
+        throw new Exception("The sql server does not exist", ex);
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -9,20 +9,17 @@ namespace RestAPIDDD.Infrastructure.Data
         public virtual DbSet<Cliente> Clientes { get; set; } = null!;
         public virtual DbSet<Produto> Produtos { get; set; } = null!;
 
-        public override int SaveChanges()
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             foreach (var entry in ChangeTracker.Entries().Where(entry => entry.Entity.GetType().GetProperty("DataCadastro") != null))
             {
                 if (entry.State == EntityState.Added)
-                {
                     entry.Property("DataCadastro").CurrentValue = DateTime.Now;
-                }
+
                 if (entry.State == EntityState.Modified)
-                {
                     entry.Property("DataCadastro").IsModified = false;
-                }
             }
-            return base.SaveChanges();
+            return base.SaveChangesAsync(cancellationToken);
         }
 
         public virtual void SetModified(object entity)

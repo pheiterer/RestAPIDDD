@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-using RestAPIDDD.Doamin.Core.Interfaces.Repositories;
+﻿using RestAPIDDD.Doamin.Core.Interfaces.Repositories;
 
 namespace RestAPIDDD.Infrastructure.Data.Repositories
 {

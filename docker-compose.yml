@@ -13,7 +13,7 @@
     depends_on:
       - sqlserver
     networks:
-      - app_network 
+      - app_network
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest

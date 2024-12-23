@@ -6,15 +6,10 @@ namespace RestAPIDDD.API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public sealed class ProdutoController : Controller
+    public sealed class ProdutoController(IApplicationServiceProduto applicationServiceProduto) : Controller
     {
 
-        private readonly IApplicationServiceProduto _applicationServiceProduto;
-
-        public ProdutoController(IApplicationServiceProduto applicationServiceProduto)
-        {
-            _applicationServiceProduto = applicationServiceProduto;
-        }
+        private readonly IApplicationServiceProduto _applicationServiceProduto = applicationServiceProduto;
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProdutoDto>>> Get()
