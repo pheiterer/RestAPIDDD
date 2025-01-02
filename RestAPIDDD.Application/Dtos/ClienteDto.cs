@@ -1,6 +1,6 @@
 ﻿namespace RestAPIDDD.Application.Dtos
 {
-    public class ClienteDto
+    public sealed class ClienteDto
     {
         public uint? Id { get; set; }
         

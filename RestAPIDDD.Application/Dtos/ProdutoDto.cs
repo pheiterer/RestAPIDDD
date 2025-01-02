@@ -1,6 +1,6 @@
 ﻿namespace RestAPIDDD.Application.Dtos
 {
-    public class ProdutoDto
+    public sealed class ProdutoDto
     {
         public uint? Id { get; set; }
         public required string Nome { get; set; }
